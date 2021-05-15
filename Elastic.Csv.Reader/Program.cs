@@ -1,3 +1,5 @@
+using Elastic.Csv.Reader.Options;
+using Elastic.Csv.Reader.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -18,6 +20,9 @@ namespace Elastic.Csv.Reader
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.Configure<ElasticCsvIndexerOptions>(hostContext.Configuration.GetSection(
+                                        ElasticCsvIndexerOptions.ElasticCsvIndexer));
+                    services.AddSingleton<IElasticIndexer, ElasticIndexer>();
                     services.AddHostedService<Worker>();
                 });
     }

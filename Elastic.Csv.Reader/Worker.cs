@@ -1,3 +1,4 @@
+using Elastic.Csv.Reader.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,10 +12,12 @@ namespace Elastic.Csv.Reader
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IElasticIndexer _elasticIndexer;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IElasticIndexer elasticIndexer)
         {
             _logger = logger;
+            _elasticIndexer = elasticIndexer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
