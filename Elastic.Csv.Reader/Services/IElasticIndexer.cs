@@ -2,6 +2,6 @@
 {
     public interface IElasticIndexer
     {
-        bool IndexFile();
+        bool IndexFile(string filePath);
     }
 }
