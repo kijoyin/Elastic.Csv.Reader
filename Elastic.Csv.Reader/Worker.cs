@@ -35,7 +35,7 @@ namespace Elastic.Csv.Reader
                 string[] filePaths = Directory.GetFiles(_indexerOptions.FolderPath, "*.csv");
                 foreach (var filePath in filePaths)
                 {
-                    _elasticIndexer.IndexFile(filePath);
+                    await _elasticIndexer.IndexFile(filePath);
                 }
                 await Task.Delay(1000, stoppingToken);
             }

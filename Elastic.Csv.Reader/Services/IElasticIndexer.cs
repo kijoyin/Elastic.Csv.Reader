@@ -1,7 +1,9 @@
-﻿namespace Elastic.Csv.Reader.Services
+﻿using System.Threading.Tasks;
+
+namespace Elastic.Csv.Reader.Services
 {
     public interface IElasticIndexer
     {
-        bool IndexFile(string filePath);
+        Task<bool> IndexFile(string filePath);
     }
 }

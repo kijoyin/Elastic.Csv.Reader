@@ -10,5 +10,10 @@ namespace Elastic.Csv.Reader.Options
     {
         public const string ElasticCsvIndexer = "ElasticCsvIndexer";
         public string FolderPath { get; set; }
+        public ElasticOptions Elastic { get; set; }
+    }
+    public class ElasticOptions
+    {
+        public string Node { get; set; }
     }
 }
