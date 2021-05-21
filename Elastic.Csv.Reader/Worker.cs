@@ -32,10 +32,15 @@ namespace Elastic.Csv.Reader
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                string[] filePaths = Directory.GetFiles(_indexerOptions.FolderPath, "*.csv");
-                foreach (var filePath in filePaths)
+                DirectoryInfo di = new DirectoryInfo(_indexerOptions.FolderPath);
+                FileInfo[] files = di.GetFiles("*.csv");
+                foreach (var file in files)
                 {
-                    await _elasticIndexer.IndexFile(filePath);
+                    var indexName = await _elasticIndexer.IndexFile(file);
+                    if (!string.IsNullOrEmpty(indexName))
+                    {
+                        file.MoveTo(@$"{file.DirectoryName}\processed\{indexName}{file.Extension}");
+                    }
                 }
                 await Task.Delay(1000, stoppingToken);
             }

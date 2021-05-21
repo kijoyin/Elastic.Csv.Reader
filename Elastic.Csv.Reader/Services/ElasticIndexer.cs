@@ -23,15 +23,20 @@ namespace Elastic.Csv.Reader.Services
             elasticClient = new ElasticClient(settings);
         }
 
-        public async Task<bool> IndexFile(string filePath)
+        public async Task<string> IndexFile(FileInfo file)
         {
-            using (var reader = new StreamReader(filePath))
+            using (var reader = new StreamReader(file.FullName))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = csv.GetRecords<dynamic>();
-                var indexManyAsyncResponse = await elasticClient.IndexManyAsync(records,"elastic");
+                var indexName = $"{Path.GetFileNameWithoutExtension(file.Name).ToLower()}-{Guid.NewGuid()}";
+                var indexManyAsyncResponse = await elasticClient.IndexManyAsync(records, indexName);
+                if(indexManyAsyncResponse.IsValid)
+                {
+                    return indexName;
+                }
             }
-            return true;
+            return null;
         }
     }
 }
